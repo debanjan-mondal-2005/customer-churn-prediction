@@ -8,7 +8,7 @@ An AI-based web app to predict customer churn using machine learning and Flask.
 
 ## 🔍 Features
 - 🔎 Predicts likelihood of customer churn
-- 📊 Visualizes output with pie and bar charts
+- 📊 Visualizes output with pie chart
 - 🌙 Light/Dark theme toggle
 - ⚙️ Powered by XGBoost, Chart.js, HTML/CSS
 
