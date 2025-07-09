@@ -3,12 +3,14 @@ import numpy as np
 import joblib
 import threading
 import time
+import shap
+import pandas as pd
 
 app = Flask(__name__)
 model = joblib.load("C:\\Users\\USER\\OneDrive\\Desktop\\Churn App\\churn_app\\churn_xgb_model.pkl")
 
 def delayed_redirect():
-    time.sleep(60)
+    time.sleep(300)
     with app.test_request_context():
         return redirect(url_for("home"))
 
@@ -108,13 +110,34 @@ def predict():
         not_churn_percentage = round(prediction_proba[0] * 100, 2)
         theme = request.form.get("theme", "light")
         output = "✅ Customer is likely to Churn." if prediction_proba[1] > prediction_proba[0] else "✅ Customer is not likely to Churn."
+        feature_names = [
+            "gender", "SeniorCitizen", "Partner", "Dependents", "tenure", "PhoneService", "PaperlessBilling",
+            "MonthlyCharges", "TotalCharges", "MultipleLines_No", "MultipleLines_No phone service", "MultipleLines_Yes",
+            "InternetService_DSL", "InternetService_Fiber optic", "InternetService_No",
+            "OnlineSecurity_No", "OnlineSecurity_No internet service", "OnlineSecurity_Yes",
+            "OnlineBackup_No", "OnlineBackup_No internet service", "OnlineBackup_Yes",
+            "DeviceProtection_No", "DeviceProtection_No internet service", "DeviceProtection_Yes",
+            "TechSupport_No", "TechSupport_No internet service", "TechSupport_Yes",
+            "StreamingTV_No", "StreamingTV_No internet service", "StreamingTV_Yes",
+            "StreamingMovies_No", "StreamingMovies_No internet service", "StreamingMovies_Yes",
+            "Contract", "PaymentMethod_Bank transfer (automatic)", "PaymentMethod_Credit card (automatic)",
+            "PaymentMethod_Electronic check", "PaymentMethod_Mailed check"
+        ]
+        X_user = pd.DataFrame(final_features, columns=feature_names)
+        explainer = shap.Explainer(model)
+        shap_values = explainer(X_user)
+        shap_df = pd.DataFrame({"feature": feature_names, "shap_value": shap_values.values[0]})
+        top_features = shap_df.reindex(shap_df.shap_value.abs().sort_values(ascending=False).index).head(5)
+        reason_text = ", ".join(top_features['feature'].tolist())
+        
         threading.Thread(target=delayed_redirect).start()
         
         return render_template('result.html', 
                                prediction_text=output,
                                churn_percentage = churn_percentage,
                                not_churn_percentage = not_churn_percentage,
-                               theme = theme)
+                               theme = theme,
+                               reason_text = reason_text)
 
     except Exception as e:
         return render_template('index.html', prediction_text=f"❌ Error: {str(e)}")
