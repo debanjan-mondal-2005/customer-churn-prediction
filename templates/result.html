@@ -102,35 +102,40 @@
             font-weight: 600;
             margin-bottom: 20px;
         }
+
         .dark-mode {
             background: #121212;
             color: #f1f1f1;
         }
+
         .dark-mode .result-container {
             background: #1e1e1e;
             color: #f1f1f1;
         }
+
         .dark-mode .left-box h2,
         .dark-mode .left-box p,
         .dark-mode .top-note {
             color: #f1f1f1;
         }
+
         .dark-mode .btn.blue {
             background-color: #0d6efd;
         }
+
         .dark-mode .btn.red {
             background-color: #dc3545;
         }
+
         .dark-mode canvas {
             background: #1e1e1e;
         }
-
     </style>
 </head>
 <body class="{{ 'dark-mode' if theme == 'dark' else '' }}">
     <div class="result-container">
         <div class="left-box">
-            <p class="top-note">⏳ Auto redirecting to Home in <span id="countdown">60</span> seconds...</p>
+            <p class="top-note">⏳ Auto redirecting to Home in <span id="countdown">300</span> seconds...</p>
             <h2>
                 {% if churn_percentage > not_churn_percentage %}
                     ❌ Customer is likely to Churn.
@@ -141,6 +146,17 @@
 
             <p>🟢 <strong>Not Churn Probability:</strong> {{ not_churn_percentage }}%</p>
             <p>🔴 <strong>Churn Probability:</strong> {{ churn_percentage }}%</p>
+
+            <p>
+                <strong>
+                    Top Reasons for {{ "Churn" if churn_percentage > not_churn_percentage else "Retention" }}:
+                </strong>
+            </p>
+            <ul>
+                {% for reason in reason_text.split(',') %}
+                <li> {{ reason.strip() }}</li>
+                {% endfor %}
+            </ul>
 
             <div class="button-container">
                 <a href="/" class="btn blue">🔙 Back</a>
