@@ -1,4 +1,4 @@
-# Churn AI 🎯
+# Attrition Forecast Engine 🎯
 An AI-based web app to predict customer churn using machine learning and Flask.
 
 ## 📘 Project Title
