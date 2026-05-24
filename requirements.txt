@@ -1,7 +1,8 @@
-Flask==2.3.2
-numpy==1.24.4
-pandas==2.0.3
-xgboost==1.7.6
-scikit-learn==1.3.2
-Matplotlib (for visualizations)
-joblib (for saving models)
+Flask
+numpy
+joblib
+pandas
+xgboost==2.1.4
+shap==0.47.1
+scikit-learn
+gunicorn

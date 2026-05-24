@@ -1,13 +1,19 @@
+# pyrefly: ignore [missing-import]
+import os
+# pyrefly: ignore [missing-import]
 from flask import Flask, render_template, request, redirect, url_for
 import numpy as np
 import joblib
 import threading
 import time
+# pyrefly: ignore [missing-import]
 import shap
 import pandas as pd
 
 app = Flask(__name__)
-model = joblib.load("C:\\Users\\USER\\OneDrive\\Desktop\\Churn App\\churn_app\\churn_xgb_model.pkl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "churn_xgb_model.pkl")
+model = joblib.load(model_path)
 
 def delayed_redirect():
     time.sleep(300)

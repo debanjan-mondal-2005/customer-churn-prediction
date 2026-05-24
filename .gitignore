@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env
+.vscode/
+.idea/
+# Note: churn_xgb_model.pkl is NOT ignored because it is required for prediction!
